@@ -36,13 +36,13 @@ class HelpCommand(commands.HelpCommand):
 
         server = f"[Support Server]({config.SERVER_LINK})"
         invite = f"[Invite Me]({config.BOT_INVITE})"
-        dashboard = f"[Privacy Policy](https://github.com/quotientbot/Quotient-Bot/wiki/privacy-policy)"
+        server_link = f"[Privacy Policy](https://discord.gg/rS58vTYeHc)"
 
-        embed.description = f"{server} **|** {invite} **|** {dashboard}\n\n"
+        embed.description = f"{server} **|** {invite} **|** {server_link}\n\n"
 
         guild = await Guild.get_or_none(pk=ctx.guild.id)
         if guild and guild.is_premium:
-            embed.description += f"<a:top_user:807911932299837460> [__Server Premium ending:__]({config.SERVER_LINK}) {discord_timestamp(guild.premium_end_time)}"
+            embed.description += f"<:premium_crown:1430393966074793984> [__Server Premium ending:__]({config.SERVER_LINK}) {discord_timestamp(guild.premium_end_time)}"
 
         for cog, cmds in mapping.items():
             if cog and cog.qualified_name not in hidden and await self.filter_commands(cmds, sort=True):

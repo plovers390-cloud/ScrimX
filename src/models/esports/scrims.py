@@ -26,7 +26,7 @@ class Scrim(BaseDbModel):
 
     id = fields.BigIntField(pk=True, index=True)
     guild_id = fields.BigIntField()
-    name = fields.TextField(default="Quotient-Scrims")
+    name = fields.TextField(default="ScrimX-Scrims")
     registration_channel_id = fields.BigIntField(index=True)
     slotlist_channel_id = fields.BigIntField()
     slotlist_message_id = fields.BigIntField(null=True)
@@ -98,7 +98,7 @@ class Scrim(BaseDbModel):
     @property
     def logschan(self):
         if self.guild is not None:
-            return discord.utils.get(self.guild.text_channels, name="quotient-scrims-logs")
+            return discord.utils.get(self.guild.text_channels, name="ScrimX-scrims-logs")
 
     @property
     def modrole(self):
@@ -453,7 +453,7 @@ class Scrim(BaseDbModel):
                 scrims_mod: discord.PermissionOverwrite(read_messages=True),
             }
             scrims_log_channel = await guild.create_text_channel(
-                name="quotient-scrims-logs",
+                name="ScrimX-scrims-logs",
                 overwrites=overwrites,
                 reason=_reason,
                 topic="**DO NOT RENAME THIS CHANNEL**",

@@ -46,7 +46,7 @@ class ScrimsSlotManager(BaseDbModel):
     @property
     def logschan(self):
         if (g := self.guild) is not None:
-            return discord.utils.get(g.text_channels, name="quotient-scrims-logs")
+            return discord.utils.get(g.text_channels, name="ScrimX-scrims-logs")
 
     async def message(self):
         channel = await self.bot.getch(self.bot.get_channel, self.bot.fetch_channel, self.main_channel_id)

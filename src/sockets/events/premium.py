@@ -57,8 +57,8 @@ class SockPrime(Cog):
         _e = discord.Embed(color=self.bot.color)
         _e.description = (
             f"{random_greeting()} {member.mention},\n"
-            "Thanks for purchasing Quotient Premium.\n\n"
-            f"[Invite Quotient Pro]({prime}) | [Support Server]({self.bot.config.SERVER_LINK}) | [Download Invoice]({invoice})"
+            "Thanks for purchasing ScrimX Premium.\n\n"
+            f"[Invite ScrimX Pro]({prime}) | [Support Server]({self.bot.config.SERVER_LINK}) | [Download Invoice]({invoice})"
         )
 
         _e.set_image(url=random_thanks())
@@ -70,7 +70,7 @@ class SockPrime(Cog):
 
         finally:
             _e = discord.Embed(
-                color=discord.Color.gold(), description=f"Thanks **{member}** for purchasing Quotient Premium."
+                color=discord.Color.gold(), description=f"Thanks **{member}** for purchasing ScrimX Premium."
             )
             _e.set_image(url=random_thanks())
             await self.hook.send(embed=_e, username="premium-logs", avatar_url=self.bot.config.PREMIUM_AVATAR)

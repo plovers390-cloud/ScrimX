@@ -8,21 +8,21 @@ class QuotientError(commands.CheckFailure):
 class NotSetup(QuotientError):
     def __init__(self):
         super().__init__(
-            "This command requires you to have Quotient's private channel.\nKindly run `{ctx.prefix}setup` and try again."
+            "This command requires you to have ScrimX's private channel.\nKindly run `{ctx.prefix}setup` and try again."
         )
 
 
 class NotPremiumGuild(QuotientError):
     def __init__(self):
         super().__init__(
-            "This command requires this server to be premium.\n\nCheckout Quotient Premium [here]({ctx.bot.prime_link})"
+            "This command requires this server to be premium.\n\nCheckout ScrimX Premium [here]({ctx.bot.prime_link})"
         )
 
 
 class NotPremiumUser(QuotientError):
     def __init__(self):
         super().__init__(
-            "This command requires you to be a premium user.\nCheckout Quotient Premium [here]({ctx.bot.prime_link})"
+            "This command requires you to be a premium user.\nCheckout ScrimX Premium [here]({ctx.bot.prime_link})"
         )
 
 

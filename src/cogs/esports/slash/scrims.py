@@ -267,7 +267,7 @@ class ScrimsSlash(commands.GroupCog, name="scrims"):
                         color=discord.Color.red(),
                         description=(
                             "You can only create 3 scrims in a server without premium.\n\n"
-                            "### Use `qpro` command to activate Quotient Pro."
+                            "### Use `xpro` command to activate Nothing Pro."
                         ),
                     )
                 )
@@ -365,7 +365,7 @@ class ScrimsSlash(commands.GroupCog, name="scrims"):
                 f"**Host:** {interaction.user.mention}\n"
             ),
         )
-        e.set_footer(text="Get more info, using `s` command.")
+        e.set_footer(text="Get more info, using `X` command.")
 
         await interaction.followup.send(embed=e)
 

@@ -124,7 +124,7 @@ class SlotlistEditButton(discord.ui.View):
                             color=0x00FFB3,
                             description=(
                                 "I see You don't have a public banlog channel in your server.\n\n"
-                                "You can set it up with `qbanlog #channel`."
+                                "You can set it up with `Nbanlog #channel`."
                             ),
                         )
                         return await interaction.followup.send(embed=_e, ephermeral=True)

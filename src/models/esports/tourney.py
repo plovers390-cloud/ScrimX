@@ -25,7 +25,7 @@ class Tourney(BaseDbModel):
 
     id = fields.BigIntField(pk=True, index=True)
     guild_id = fields.BigIntField()
-    name = fields.CharField(max_length=30, default="Quotient-Tourney")
+    name = fields.CharField(max_length=30, default="Nothing-Tourney")
     registration_channel_id = fields.BigIntField(index=True)
     confirm_channel_id = fields.BigIntField()
     role_id = fields.BigIntField()
@@ -82,7 +82,7 @@ class Tourney(BaseDbModel):
     @property
     def logschan(self) -> Optional[discord.TextChannel]:
         if (g := self.guild) is not None:
-            return discord.utils.get(g.text_channels, name="quotient-tourney-logs")
+            return discord.utils.get(g.text_channels, name="ScrimX-tourney-logs")
 
     @property
     def registration_channel(self) -> Optional[discord.TextChannel]:
@@ -289,7 +289,7 @@ class Tourney(BaseDbModel):
                 tourney_mod: discord.PermissionOverwrite(read_messages=True),
             }
             tourney_log_channel = await _g.create_text_channel(
-                name="quotient-tourney-logs",
+                name="ScrimX-tourney-logs",
                 overwrites=overwrites,
                 reason=_reason,
                 topic="**DO NOT RENAME THIS CHANNEL**",
@@ -377,7 +377,7 @@ class Tourney(BaseDbModel):
         )
 
         await registration_channel.send(
-            embed=discord.Embed(color=self.bot.color, description=f"**{self.name} registration paused.**")
+            embed=discord.Embed(color=self.bot.color, description=f"**ScrimX-{self.name} registration paused.**")
         )
         await Tourney.filter(pk=self.id).update(started_at=None, closed_at=self.bot.current_time)
         return True, True

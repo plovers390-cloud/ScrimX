@@ -46,7 +46,7 @@ class QuotientView(discord.ui.View):
                 return
 
     async def on_error(self, interaction: discord.Interaction, error: Exception, item) -> None:
-        print("Quotient View Error:", error)
+        print("ScrimX View Error:", error)
         self.ctx.bot.dispatch("command_error", self.ctx, error)
 
     @staticmethod

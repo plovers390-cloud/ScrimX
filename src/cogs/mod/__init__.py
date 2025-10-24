@@ -13,7 +13,8 @@ from discord.ext import commands
 from constants import LockType
 from core import Cog, Context, QuotientView, role_command_check
 from models import Lockdown
-from utils import ActionReason, BannedMember, FutureTime, MemberID, QuoUser, emote, human_timedelta, plural
+from utils import ActionReason, BannedMember, FutureTime, MemberID, QuoUser, human_timedelta, plural
+from utils import emote
 
 from .events import *
 from .utils import _complex_cleanup_strategy, _self_clean_system, do_removal
@@ -24,12 +25,157 @@ class Mod(Cog):
     def __init__(self, bot: Quotient):
         self.bot = bot
 
+    @commands.command(aliases=["amr"])
+    @commands.has_guild_permissions(manage_roles=True)
+    @commands.bot_has_guild_permissions(manage_roles=True)
+    @commands.cooldown(4, 1, type=commands.BucketType.guild)
+    async def addmultipleroles(self, ctx: Context, member: discord.Member, *roles: discord.Role):
+     """
+      Add multiple roles to a member at once.
+    
+    Example:
+    {prefix}addmultipleroles @user @role1 @role2 @role3
+    {prefix}amr @user @role1 @role2 @role3
+    """
+     if not roles:
+         return await ctx.error("Please provide at least one role to add.")
+ 
+    # Check if bot has permission to assign all roles
+     bot_top_role = ctx.guild.me.top_role
+     for role in roles:
+        if role >= bot_top_role:
+            return await ctx.error(f"I cannot assign {role.mention} as it is higher than or equal to my top role.")
+        
+        if not role.is_assignable():
+            return await ctx.error(f"I cannot assign {role.mention} due to permission hierarchy.")
+
+    # Check if author has permission to assign all roles
+     author_top_role = ctx.author.top_role
+     for role in roles:
+        if role >= author_top_role and ctx.author != ctx.guild.owner:
+            return await ctx.error(f"You cannot assign {role.mention} as it is higher than or equal to your top role.")
+
+     reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
+    
+     # Check which roles the member already has
+     roles_to_add = [role for role in roles if role not in member.roles]
+     roles_already_have = [role for role in roles if role in member.roles]
+    
+     if not roles_to_add:
+      return await ctx.error(f"{member.mention} already has all the specified roles.")
+
+     m = await ctx.simple(f"{emote.Loading} Adding {plural(len(roles_to_add)):role} to {member.mention}...")
+
+     success, failed = 0, 0
+     added_roles = []
+
+     for role in roles_to_add:
+        try:
+            await member.add_roles(role, reason=reason)
+            success += 1
+            added_roles.append(role)
+        except discord.HTTPException:
+            failed += 1
+
+     # Create success message
+     message = f"Successfully added {plural(success):role} to {member.mention}. (Failed: {failed})"
+    
+     if roles_already_have:
+        message += f"\n{member.mention} already had {len(roles_already_have)} role(s)."
+
+     if success > 0:
+        # Create a view with revert button (using added_roles parameter)
+        _view = QuotientView(ctx)
+        _view.add_item(RoleRevertButton(ctx, members=[member], added_roles=added_roles, take_role=True))
+        
+        await ctx.safe_delete(m)
+        _view.message = await ctx.success(message, view=_view)
+     else:
+        await ctx.safe_delete(m)
+        await ctx.error(f"Failed to add any roles to {member.mention}.")
+
+    @commands.command(aliases=["rmr"])
+    @commands.has_guild_permissions(manage_roles=True)
+    @commands.bot_has_guild_permissions(manage_roles=True)
+    @commands.cooldown(4, 1, type=commands.BucketType.guild)
+    async def removemultipleroles(self, ctx: Context, member: discord.Member, *roles: discord.Role):
+     """
+     Remove multiple roles from a member at once.
+    
+     Example:
+     {prefix}removemultipleroles @user @role1 @role2 @role3
+     {prefix}rmr @user @role1 @role2 @role3
+     """
+     if not roles:
+        return await ctx.error("Please provide at least one role to remove.")
+
+     # Check if bot has permission to remove all roles
+     bot_top_role = ctx.guild.me.top_role
+     for role in roles:
+        if role >= bot_top_role:
+            return await ctx.error(f"I cannot remove {role.mention} as it is higher than or equal to my top role.")
+        
+        if not role.is_assignable():
+            return await ctx.error(f"I cannot remove {role.mention} due to permission hierarchy.")
+
+     # Check if author has permission to remove all roles
+     author_top_role = ctx.author.top_role
+     for role in roles:
+        if role >= author_top_role and ctx.author != ctx.guild.owner:
+            return await ctx.error(f"You cannot remove {role.mention} as it is higher than or equal to your top role.")
+
+     reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
+    
+     # Check which roles the member actually has
+     roles_to_remove = [role for role in roles if role in member.roles]
+     roles_not_have = [role for role in roles if role not in member.roles]
+    
+     if not roles_to_remove:
+        return await ctx.error(f"{member.mention} doesn't have any of the specified roles.")
+
+     # Create loading message
+     loading_msg = await ctx.send(f"{emote.Loading} Removing {len(roles_to_remove)} roles from {member.mention}...")
+
+     success, failed = 0, 0
+     removed_roles = []
+
+     for role in roles_to_remove:
+        try:
+            await member.remove_roles(role, reason=reason)
+            success += 1
+            removed_roles.append(role)
+        except discord.HTTPException as e:
+            print(f"Failed to remove role {role.name}: {e}")  # Debug print
+            failed += 1
+
+     # Create success message
+     message = f"Successfully removed {success} role(s) from {member.mention}."
+    
+     if failed > 0:
+        message += f" (Failed: {failed})"
+    
+     if roles_not_have:
+        message += f"\n{member.mention} didn't have {len(roles_not_have)} role(s)."
+
+     # Delete loading message
+     await loading_msg.delete()
+
+     if success > 0:
+        # Create a view with revert button (take_role=False means we'll add back the roles on revert)
+        from .views import RoleRevertButton
+        _view = QuotientView(ctx)
+        _view.add_item(RoleRevertButton(ctx, members=[member], added_roles=removed_roles, take_role=False))
+        
+        await ctx.success(message, view=_view)
+     else:
+        await ctx.error(f"Failed to remove any roles from {member.mention}.")
+
     @commands.command()
     @commands.has_permissions(manage_guild=True)
     @commands.cooldown(5, 1, type=commands.BucketType.user)
     async def selfclean(self, ctx: Context, search=100):
         """
-        Clean Quotient's messages,
+        Clean ScrimX's messages,
         Note: If bot has `manage_messages` permissions then it will delete the command messages too.
         """
         strategy = _self_clean_system
@@ -218,7 +364,7 @@ class Mod(Cog):
                     f"Alright, Aborting. If you wish to add the role to limited users, do:\n\n`{ctx.prefix}role @role @user1 @user2 @user3 ...`"
                 )
 
-        m = await ctx.simple(f"{emote.loading} Adding {role.mention} to {plural(members):member|members}.")
+        m = await ctx.simple(f"{emote.Loading} Adding {role.mention} to {plural(members):member|members}.")
 
         for member in members:
             if role not in member.roles:
@@ -253,7 +399,7 @@ class Mod(Cog):
             return await ctx.success("Alright, Aborting.")
 
         reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
-        m = await ctx.simple(f"{emote.loading} Adding {role.mention} to {plural(members):human|humans}.")
+        m = await ctx.simple(f"{emote.Loading} Adding {role.mention} to {plural(members):human|humans}.")
 
         success, failed = 0, 0
 
@@ -289,7 +435,7 @@ class Mod(Cog):
             return await ctx.success("Alright, Aborting.")
 
         reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
-        m = await ctx.simple(f"{emote.loading} Adding {role.mention} to {plural(members):bot|bots}.")
+        m = await ctx.simple(f"{emote.Loading} Adding {role.mention} to {plural(members):bot|bots}.")
 
         success, failed = 0, 0
 
@@ -326,7 +472,7 @@ class Mod(Cog):
             return await ctx.success("Alright, Aborting.")
 
         reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
-        m = await ctx.simple(f"{emote.loading} Adding {role.mention} to {plural(members):user|users}.")
+        m = await ctx.simple(f"{emote.Loading} Adding {role.mention} to {plural(members):user|users}.")
 
         success, failed = 0, 0
 
@@ -361,7 +507,7 @@ class Mod(Cog):
                     f"Alright, Aborting. If you wish to remove the role from limited users, do:\n\n`{ctx.prefix}rrole @role @user1 @user2 @user3 ...`"
                 )
 
-        m = await ctx.simple(f"{emote.loading} Removing {role.mention} from {plural(members):member|members}.")
+        m = await ctx.simple(f"{emote.Loading} Removing {role.mention} from {plural(members):member|members}.")
 
         for member in members:
             await member.remove_roles(role, reason=reason)
@@ -393,7 +539,7 @@ class Mod(Cog):
             return await ctx.success("Alright, Aborting.")
 
         reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
-        m = await ctx.simple(f"{emote.loading} Remove {role.mention} from {plural(members):human|humans}.")
+        m = await ctx.simple(f"{emote.Loading} Remove {role.mention} from {plural(members):human|humans}.")
 
         success, failed = 0, 0
 
@@ -429,7 +575,7 @@ class Mod(Cog):
             return await ctx.success("Alright, Aborting.")
 
         reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
-        m = await ctx.simple(f"{emote.loading} Remove {role.mention} from {plural(members):bot|bots}.")
+        m = await ctx.simple(f"{emote.Loading} Remove {role.mention} from {plural(members):bot|bots}.")
 
         success, failed = 0, 0
 
@@ -465,7 +611,7 @@ class Mod(Cog):
             return await ctx.success("Alright, Aborting.")
 
         reason = f"Action done by {ctx.author} (ID: {ctx.author.id})"
-        m = await ctx.simple(f"{emote.loading} Removing {role.mention} from {plural(members):user|users}.")
+        m = await ctx.simple(f"{emote.Loading} Removing {role.mention} from {plural(members):user|users}.")
 
         success, failed = 0, 0
 
@@ -550,7 +696,7 @@ class Mod(Cog):
         if not prompt:
             return await ctx.success(f"Alright, aborting.")
 
-        await ctx.send(f"Kindly wait.. {emote.loading}", delete_after=3)
+        await ctx.send(f"Kindly wait.. {emote.Loading}", delete_after=3)
 
         success, failed = [], 0
         reason = f"Action done by -> {str(ctx.author)} ({ctx.author.id})"
@@ -663,7 +809,7 @@ class Mod(Cog):
         if not prompt:
             return await ctx.success(f"Alright, aborting.")
 
-        await ctx.send(f"Kindly wait.. {emote.loading}", delete_after=3)
+        await ctx.send(f"Kindly wait.. {emote.Loading}", delete_after=3)
 
         success, failed = [], 0
         reason = f"Action done by -> {str(ctx.author)} ({ctx.author.id})"
@@ -744,6 +890,7 @@ class Mod(Cog):
                 await ctx.success(f"Success")
             else:
                 await ctx.success(f"OK!")
+
 
 
 async def setup(bot: Quotient) -> None:

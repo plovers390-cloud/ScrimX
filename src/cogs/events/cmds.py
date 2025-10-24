@@ -56,13 +56,13 @@ class CmdEvents(Cog):
 
         if self.bot.lockdown is True:
             t = (
-                "**Quotient is getting new features** 🥳\n"
-                "Dear user, Quotient is updating and is not accepting any commands.\n"
+                "**ScrimX is getting new features** 🥳\n"
+                "Dear user, ScrimX is updating and is not accepting any commands.\n"
                 "It will back within **2 minutes**.\n"
             )
 
             if self.bot.lockdown_msg:
-                t += f"\n\n**Message from developer:**\n{self.bot.lockdown_msg} ~ deadshot#7999"
+                t += f"\n\n**Message from developer:**\n{self.bot.lockdown_msg}  ~ trust_42#8379"
 
             await ctx.error(t)
             return False
@@ -101,7 +101,7 @@ class CmdEvents(Cog):
             if not member.bot and record.humans:
                 for role in record.humans:
                     try:
-                        await member.add_roles(discord.Object(id=role), reason="Quotient's autorole")
+                        await member.add_roles(discord.Object(id=role), reason="ScrimX's autorole")
                     except (discord.NotFound, discord.Forbidden):
                         await Autorole.filter(guild_id=guild.id).update(humans=ArrayRemove("humans", role))
                         continue
@@ -109,7 +109,7 @@ class CmdEvents(Cog):
             elif member.bot and record.bots:
                 for role in record.bots:
                     try:
-                        await member.add_roles(discord.Object(id=role), reason="Quotient's autorole")
+                        await member.add_roles(discord.Object(id=role), reason="ScrimX's autorole")
                     except (discord.Forbidden, discord.NotFound):
                         await Autorole.filter(guild_id=guild.id).update(bots=ArrayRemove("bots", role))
                         continue

@@ -60,7 +60,7 @@ class ScrimsSlotManagerSetup(EsportsBaseView):
         _e = discord.Embed(color=0x00FFB3, title=f"Scrims Slot-Manager Setup")
 
         _e.description = (
-            "Slot-Manager is a way to ease-up scrims slot management process. With Quotient's slotm users can - "
+            "Slot-Manager is a way to ease-up scrims slot management process. With ScrimX's slotm users can - "
             "cancel their slot, claim an empty slot and also set reminder for vacant slots, All without bugging any mod.\n\n"
             f"**Current slot-manager channels:**\n{_sm}\n\nDon't forget to set the match times :)"
         )
@@ -73,7 +73,7 @@ class ScrimsSlotManagerSetup(EsportsBaseView):
 
         if not await self.ctx.is_premium_guild():
             if await ScrimsSlotManager.filter(guild_id=self.ctx.guild.id).count() >= 1:
-                return await self.ctx.premium_mango("You need Quotient Premium to add more than 1 Slot-Manager channel.")
+                return await self.ctx.premium_mango("You need ScrimX Premium to add more than 1 Slot-Manager channel.")
 
         available_scrims = await ScrimsSlotManager.available_scrims(self.ctx.guild)
         if not available_scrims:

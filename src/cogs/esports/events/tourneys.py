@@ -287,7 +287,7 @@ class TourneyEvents(Cog):
                     msg = (
                         f"Congratulations {before.mention} on becoming a {role.mention},\n\n"
                         "Here's a list of perks you get with the new responsibilities:\n"
-                        "• You can now use all `qtourney` commands.\n"
+                        "• You can now use all `xtourney` commands.\n"
                         "• You can now edit, manage or even delete any tourney.\n"
                         "• **Your messages are now ignored in all the registration channels.**\n\n"
                         "Good luck!"
@@ -305,20 +305,20 @@ class TourneyEvents(Cog):
 
     @Cog.listener()
     async def on_guild_channel_update(self, before: discord.TextChannel, after: discord.TextChannel):
-        if before.name == after.name or not before.name == "quotient-tourney-logs":
+        if before.name == after.name or not before.name == "ScrimX-tourney-logs":
             return
 
         if after.permissions_for(after.guild.me).manage_channels:
             return await after.edit(
-                name="quotient-tourney-logs",
+                name="ScrimX-tourney-logs",
                 reason="tourney logging won't work if you rename this.",
             )
 
         _e = discord.Embed(
             color=discord.Color.red(),
             description=(
-                "Someone renamed this channel kindly rename it back to `quotient-tourney-logs`, "
-                "**Quotient Tourneys won't work without it.**"
+                "Someone renamed this channel kindly rename it back to `ScrimX-tourney-logs`, "
+                "**ScrimX Tourneys won't work without it.**"
             ),
         )
         await after.send(
@@ -336,12 +336,12 @@ class TourneyEvents(Cog):
         _e = discord.Embed(
             color=discord.Color.red(),
             description=(
-                f"Someone renamed Quotient's tourney-mod role to {after.mention}, kindly rename it back to `tourney-mod`."
-                "**Quotient Tourneys need the name of this role to be `tourney-mod`**"
+                f"Someone renamed ScrimX's tourney-mod role to {after.mention}, kindly rename it back to `tourney-mod`."
+                "**ScrimX Tourneys need the name of this role to be `tourney-mod`**"
             ),
         )
 
-        c = discord.utils.get(after.guild.text_channels, name="quotient-tourney-logs")
+        c = discord.utils.get(after.guild.text_channels, name="ScrimX-tourney-logs")
         if c:
             await c.send(
                 embed=_e, content=getattr(after.guild.owner, "mention")

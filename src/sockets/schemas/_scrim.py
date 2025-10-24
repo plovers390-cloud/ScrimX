@@ -39,7 +39,7 @@ def str_to_time(_t: str = None):
 class BaseScrim(BaseModel):
     id: int = None
     guild_id: int
-    name: str = "Quotient-Scrims"
+    name: str = "ScrimX-Scrims"
     registration_channel_id: int
     slotlist_channel_id: int
     role_id: int
@@ -83,18 +83,18 @@ class BaseScrim(BaseModel):
 
         reg_channel = bot.get_channel(self.registration_channel_id)
         if not reg_channel:
-            return False, "Quotient can't see your registration channel. Give Perms."
+            return False, "ScrimX can't see your registration channel. Give Perms."
 
         _p = reg_channel.permissions_for(guild.me)
         if not all((_p.manage_channels, _p.manage_permissions, _p.manage_messages)):
-            return False, "Quotient can't manage this registration channel. Give Perms."
+            return False, "ScrimX can't manage this registration channel. Give Perms."
 
         role = guild.get_role(self.role_id)
         if not role:
-            return False, "Quotient couldn't find your sucess role."
+            return False, "ScrimX couldn't find your sucess role."
 
         if role >= guild.me.top_role:
-            return False, "Drag Quotent role above your success role."
+            return False, "Drag ScrimX role above your success role."
 
         _p = role.permissions
         if any((_p.administrator, _p.manage_channels, _p.manage_roles, _p.kick_members, _p.ban_members)):
@@ -155,9 +155,9 @@ class BaseScrim(BaseModel):
             return False, "Couldn't find your server. Try again in a few minutes."
 
         if not all((g_perms.manage_channels, g_perms.manage_roles, g_perms.manage_messages)):
-            return False, "Quotient needs manage channels, manage roles permission."
+            return False, "ScrimX needs manage channels, manage roles permission."
 
         if not all((g_perms.add_reactions, g_perms.embed_links)):
-            return False, "Quotient needs add reacions & embed links permission."
+            return False, "ScrimX needs add reacions & embed links permission."
 
         return True, True

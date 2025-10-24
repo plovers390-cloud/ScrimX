@@ -108,7 +108,7 @@ class MinLines(ScrimsButton):
         await interaction.response.defer()
         if not await self.ctx.is_premium_guild():
             return await self.ctx.error(
-                "**Quotient Premium is required to use this feature.**\n\n`Use qpro command to activate Premium.`", 5
+                "**ScrimX Premium is required to use this feature.**\n\n`Use xpro command to activate Premium.`", 5
             )
 
         m = await self.ctx.simple("How many lines in registration message are required for registration? (Max `100`)")
@@ -129,7 +129,7 @@ class DuplicateTags(ScrimsButton):
 
         if not await self.ctx.is_premium_guild():
             return await self.ctx.error(
-                "[Quotient Premium](https://quotientbot.xyz/premium) is required to use this feature.", 4
+                "[ScrimX Premium](https://discord.gg/rS58vTYeHc) is required to use this feature.", 4
             )
 
         self.view.record.allow_duplicate_tags = not self.view.record.allow_duplicate_tags
@@ -183,7 +183,7 @@ class SetEmojis(ScrimsButton):
         await interaction.response.defer()
         if not await self.ctx.is_premium_guild():
             return await self.ctx.error(
-                "[Quotient Premium](https://quotientbot.xyz/premium) is required to use this feature.", 4
+                "[ScrimX Premium](https://discord.gg/rS58vTYeHc) is required to use this feature.", 4
             )
 
         e = discord.Embed(color=self.ctx.bot.color, title="Edit scrims emojis")

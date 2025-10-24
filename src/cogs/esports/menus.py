@@ -504,7 +504,7 @@ class AutocleanMenu(menus.Menu):
         msg = await self.ctx.send(
             "**At what time should I run cleaner?**"
             "**Example: 14:00** - Registration will open at 2PM.\n\n"
-            "**Currently Quotient works according to Indian Standard Time (UTC+05:30)**"
+            "**Currently Nothing works according to Indian Standard Time (UTC+05:30)**"
         )
 
         clean_time = await inputs.time_input(self.ctx, self.check, delete_after=True)

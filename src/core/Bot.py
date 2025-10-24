@@ -37,13 +37,13 @@ os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
 os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True"
 os.environ["OMP_THREAD_LIMIT"] = "1"
 
-__all__ = ("Quotient", "bot")
+__all__ = ("Nothing", "bot")
 
 
-on_startup: List[Callable[["Quotient"], Coroutine]] = []
+on_startup: List[Callable[["Nothing"], Coroutine]] = []
 
 
-class Quotient(commands.AutoShardedBot):
+class Nothing(commands.AutoShardedBot):
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(
             command_prefix=self.get_prefix,
@@ -54,7 +54,7 @@ class Quotient(commands.AutoShardedBot):
             help_command=HelpCommand(),
             chunk_guilds_at_startup=False,
             allowed_mentions=AllowedMentions(everyone=False, roles=False, replied_user=True, users=True),
-            activity=discord.Activity(type=discord.ActivityType.listening, name="qsetup | qhelp"),
+            activity=discord.Activity(type=discord.ActivityType.listening, name="xsetup | xhelp"),
             proxy=getattr(cfg, "PROXY_URI", None),
             **kwargs,
         )
@@ -122,14 +122,14 @@ class Quotient(commands.AutoShardedBot):
 
     @property
     def prime_link(self):
-        return "https://quotientbot.xyz/premium"
+        return "https://discord.gg/rS58vTYeHc"
 
     @property
     def color(self):
         return self.config.COLOR
 
     def reboot(self):
-        return os.system("pm2 reload quotient")
+        return os.system("pm2 reload Nothing")
 
     async def init_quo(self):
         """Instantiating aiohttps ClientSession and telling tortoise to create relations"""
@@ -152,7 +152,7 @@ class Quotient(commands.AutoShardedBot):
     async def get_prefix(self, message: discord.Message) -> Union[str, Callable, List[str]]:
         """Get a guild's prefix"""
         if not message.guild:
-            return commands.when_mentioned_or("q")(self, message)
+            return commands.when_mentioned_or(cfg.PREFIX)(self, message)
 
         prefix = None
         guild = self.cache.guild_data.get(message.guild.id)
@@ -161,16 +161,16 @@ class Quotient(commands.AutoShardedBot):
 
         else:
             self.cache.guild_data[message.guild.id] = {
-                "prefix": "q",
+                "prefix": cfg.PREFIX, 
                 "color": self.color,
                 "footer": cfg.FOOTER,
             }
 
-        prefix = prefix or "q"
+        prefix = prefix or cfg.PREFIX
+        print(f"Final prefix being used: {prefix}")  # Debug
 
-        return commands.when_mentioned_or(
-            *tuple("".join(chars) for chars in itertools.product(*zip(prefix.lower(), prefix.upper())))
-        )(self, message)
+    # simple way to support mention + prefix
+        return commands.when_mentioned_or(prefix)(self, message)
 
     async def close(self) -> None:
         await super().close()
@@ -211,7 +211,8 @@ class Quotient(commands.AutoShardedBot):
         )
 
     async def on_ready(self):
-        print(f"[Quotient] Logged in as {self.user.name}({self.user.id})")
+        await self.tree.sync()
+        print(f"[ScrimX] Logged in as {self.user.name}({self.user.id})")
 
     async def wait_and_delete(self, message: discord.Message, delay: int = 10):
         """Waits for `delay` seconds and deletes the message"""
@@ -323,7 +324,7 @@ class Quotient(commands.AutoShardedBot):
 
     @property
     def server(self) -> Optional[discord.Guild]:
-        return self.get_guild(746337818388987967)
+        return self.get_guild(1424418956890079435)
 
     @property
     def invite_url(self) -> str:
@@ -419,7 +420,7 @@ class Quotient(commands.AutoShardedBot):
                 return
 
 
-bot = Quotient()
+bot = Nothing()
 
 
 @bot.before_invoke

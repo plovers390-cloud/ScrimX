@@ -11,9 +11,9 @@ DISCORD_TOKEN = ""
 
 COLOR = 0x00FFB3
 
-FOOTER = "quo is lub!"
+FOOTER = "scrimx is lub!"
 
-PREFIX = "q"
+PREFIX = "x"
 
 SERVER_LINK = ""
 

@@ -89,7 +89,7 @@ class TourneyGroupManager(EsportsBaseView):
             f"Write the group number and the name of group role.\n"
             "**Format:** `Group Number, Name of Group Role`\n\n"
             "Note that you can also mention the role instead of name to give it to users, "
-            "or just write its name, if there is no role of that name, Quotient "
+            "or just write its name, if there is no role of that name, ScrimX "
             "will create the role and give it to group leaders.\n\n"
             "**Example:**```1, @group_role\n2, Group role\n3, @3rd_group```\n"
             "*Enter upto 15 roles at a time.*",
@@ -205,7 +205,7 @@ class GroupListView(EsportsBaseView):
             description=(
                 f"**How would you like to publish the group list of {tourney}?**\n\n"
                 "• `Webhook` will create a webhook in the channel and will send group embeds with your server's logo and name.\n"
-                "• `Bot Option` will just make Quotient send the embeds.\n\n"
+                "• `Bot Option` will just make Nothing send the embeds.\n\n"
                 "*Webhook Option is more cool.*"
             ),
         )
@@ -224,7 +224,7 @@ class GroupListView(EsportsBaseView):
 
         try:
             _webhook = await self.channel.create_webhook(
-                name="Quotient Group List", reason=f"Created by {self.ctx.author} to send group list"
+                name="ScrimX Group List", reason=f"Created by {self.ctx.author} to send group list"
             )
         except Exception as e:
             return await self.error_embed(e)

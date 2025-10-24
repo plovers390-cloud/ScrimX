@@ -28,7 +28,7 @@ class TagCheck(BaseDbModel):
     @property
     def ignorerole(self) -> Optional[discord.Role]:
         if not self._guild is None:
-            return discord.utils.get(self._guild.roles, name="quotient-tag-ignore")
+            return discord.utils.get(self._guild.roles, name="SCrimX-tag-ignore")
 
     def __str__(self):
         return f"{getattr(self.channel,'mention','channel-not-found')} (Mentions: `{self.required_mentions}`)"
@@ -54,4 +54,4 @@ class EasyTag(BaseDbModel):
     @property
     def ignorerole(self) -> Optional[discord.Role]:
         if not self._guild is None:
-            return discord.utils.get(self._guild.roles, name="quotient-tag-ignore")
+            return discord.utils.get(self._guild.roles, name="ScrimX-tag-ignore")

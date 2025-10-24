@@ -26,7 +26,7 @@ class QuoPages:
         timeout=60.0,
         title=None,
         show_page_count=True,
-        embed_color=0x00FFB3,
+        embed_color=0xFF0000,
         compact=False,
     ):
         self.ctx = ctx

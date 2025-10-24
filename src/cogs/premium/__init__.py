@@ -17,7 +17,8 @@ import config
 from constants import random_greeting, random_thanks
 from core import Cog, Context
 from models import Guild, PremiumTxn, Timer, User
-from utils import IST, discord_timestamp, emote, strtime
+from utils import IST, discord_timestamp, strtime
+from utils import emote
 
 from .expire import deactivate_premium, extra_guild_perks, remind_guild_to_pay, remind_user_to_pay
 from .views import PremiumPurchaseBtn, PremiumView
@@ -32,7 +33,7 @@ class PremiumCog(Cog, name="Premium"):
     @commands.command()
     @commands.bot_has_permissions(embed_links=True)
     async def pstatus(self, ctx: Context):
-        """Get your Quotient Premium status and the current server's."""
+        """Get your ScrimX Premium status and the current server's."""
         user = await User.get_or_none(user_id=ctx.author.id)
         guild = await Guild.filter(guild_id=ctx.guild.id).first()
 
@@ -49,7 +50,7 @@ class PremiumCog(Cog, name="Premium"):
             booster = guild.booster or await self.bot.fetch_user(guild.made_premium_by)
             btext = f"\n> Activated: Yes!\n> Ending: {discord_timestamp(guild.premium_end_time,'f')}\n> Upgraded by: **{booster}**"
 
-        embed = self.bot.embed(ctx, title="Quotient Premium", url=f"{self.bot.config.WEBSITE}")
+        embed = self.bot.embed(ctx, title="ScrimX Premium", url=f"{self.bot.config.WEBSITE}")
         embed.add_field(name="User", value=atext, inline=False)
         embed.add_field(name="Server", value=btext, inline=False)
         embed.set_thumbnail(url=ctx.guild.me.display_avatar.url)
@@ -57,17 +58,26 @@ class PremiumCog(Cog, name="Premium"):
 
     @commands.hybrid_command(aliases=("perks", "pro"))
     async def premium(self, ctx: Context):
-        """Checkout Quotient Premium Plans."""
+        """Checkout ScrimX Premium Plans."""
+        check = self.bot.get_emoji(807913701151342592)
+        if not check: "✅" 
         _e = discord.Embed(
-            color=self.bot.color,
-            description=f"[**Features of Quotient Pro -**]({self.bot.config.SERVER_LINK})\n\n"
-            f"{emote.check} Access to `Quotient Pro` bot.\n"
+            color=self.bot.config.COLOR,
+            description=f"[**Features of ScrimX Pro -**]({self.bot.config.SERVER_LINK})\n\n"
+            f"{emote.check} Access to `ScrimX Pro` bot.\n"
+
             f"{emote.check} Unlimited Scrims.\n"
+
             f"{emote.check} Unlimited Tournaments.\n"
+
             f"{emote.check} Custom Reactions for Regs.\n"
+
             f"{emote.check} Smart SSverification.\n"
+
             f"{emote.check} Cancel-Claim Panel.\n"
+
             f"{emote.check} Premium Role + more...\n",
+            
         )
 
         v = discord.ui.View(timeout=None)
@@ -123,10 +133,10 @@ class PremiumCog(Cog, name="Premium"):
 
         if (_ch := _g.private_ch) and _ch.permissions_for(_ch.guild.me).embed_links:
             _e = discord.Embed(
-                color=discord.Color.red(), title="⚠️__**Quotient Pro Subscription Ended**__⚠️", url=config.SERVER_LINK
+                color=discord.Color.red(), title="⚠️__**ScrimX Pro Subscription Ended**__⚠️", url=config.SERVER_LINK
             )
             _e.description = (
-                "This is to inform you that your subscription of Quotient Pro has been ended.\n\n"
+                "This is to inform you that your subscription of ScrimX Pro has been ended.\n\n"
                 "*Following is a list of perks or data you lost:*"
             )
 
@@ -174,7 +184,7 @@ class PremiumCog(Cog, name="Premium"):
 
         with suppress(discord.HTTPException, AttributeError):
             _e = discord.Embed(
-                color=discord.Color.gold(), description=f"Thanks **{member}** for purchasing Quotient Premium."
+                color=discord.Color.gold(), description=f"Thanks **{member}** for purchasing ScrimX Premium."
             )
             _e.set_image(url=random_thanks())
             await self.hook.send(embed=_e, username="premium-logs", avatar_url=self.bot.config.PREMIUM_AVATAR)
@@ -184,17 +194,17 @@ class PremiumCog(Cog, name="Premium"):
 
         _e = discord.Embed(
             color=self.bot.color,
-            title="Quotient Pro Purchase Successful!",
+            title="Scrimx Pro Purchase Successful!",
             url=self.bot.config.SERVER_LINK,
             description=(
                 f"{random_greeting()} {member.mention},\n"
-                f"Thanks for purchasing Quotient Premium. Your server **{upgraded_guild}** has access to Quotient Pro features until `{_guild.premium_end_time.strftime('%d-%b-%Y %I:%M %p')}`.\n\n"
-                "[Click me to Invite Quotient Pro Bot to your server](https://discord.com/oauth2/authorize?client_id=902856923311919104&scope=applications.commands%20bot&permissions=21175985838)\n"
+                f"Thanks for purchasing ScrimX Premium. Your server **{upgraded_guild}** has access to ScrimX Pro features until `{_guild.premium_end_time.strftime('%d-%b-%Y %I:%M %p')}`.\n\n"
+                "[Click me to Invite ScrimX Pro Bot to your server](https://discord.com/oauth2/authorize?client_id=902856923311919104&scope=applications.commands%20bot&permissions=21175985838)\n"
             ),
         )
 
         if member not in self.bot.server.members:
-            _e.description += f"\n\n[To claim your Premium Role, Join Quotient HQ]({self.bot.config.SERVER_LINK})."
+            _e.description += f"\n\n[To claim your Premium Role, Join ScrimX HQ]({self.bot.config.SERVER_LINK})."
 
         _view = discord.ui.View(timeout=None)
 

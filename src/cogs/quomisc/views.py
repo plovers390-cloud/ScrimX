@@ -52,7 +52,7 @@ class VoteButton(BaseView):
         self.add_item(
             discord.ui.Button(
                 style=discord.ButtonStyle.link,
-                url="https://quotientbot.xyz/vote",
+                url="https://discord.gg/rS58vTYeHc",
                 label="Click Here",
             )
         )
@@ -75,7 +75,7 @@ class MoneyButton(BaseView):
         _u = await User.get(pk=self.ctx.author.id)
         if not _u.money >= 120:
             return await interaction.followup.send(
-                f"{emote.error} Insufficient Quo Coins in your account.", ephemeral=True
+                f"{emote.error} Insufficient ScrimX Coins in your account.", ephemeral=True
             )
 
         end_time = (
@@ -94,8 +94,8 @@ class MoneyButton(BaseView):
             await member.add_roles(discord.Object(id=self.bot.config.PREMIUM_ROLE), reason="They purchased premium.")
 
         await self.ctx.success(
-            "Credited Quotient Prime for 1 Month to your account,\n\n"
-            "Use `qboost` in any server to upgrade it with Prime."
+            "Credited ScrimX Plus for 1 Month to your account,\n\n"
+            "Use `xboost` in any server to upgrade it with Plus."
         )
 
 

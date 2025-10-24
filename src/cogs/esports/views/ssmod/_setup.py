@@ -44,7 +44,7 @@ class SsmodMainView(EsportsBaseView):
 
         if not await self.ctx.is_premium_guild():
             if await SSVerify.filter(guild_id=self.ctx.guild.id).exists():
-                return await self.ctx.premium_mango("You need Quotient Premium to setup more than 1 ssverify.")
+                return await self.ctx.premium_mango("You need ScrimX Premium to setup more than 1 ssverify.")
 
         view = SetupWizard(self.ctx)
         _e = view.initial_message()
@@ -63,7 +63,7 @@ class SsmodMainView(EsportsBaseView):
     async def stop_ssmod_button(self, interaction: discord.Interaction, button: discord.Button):
         _e = discord.Embed(color=0x00FFB3, title="Screenshots Manager FAQ", url=self.ctx.config.SERVER_LINK)
         _e.description = (
-            "**How to setup Quotient ssverification?**\n"
+            "**How to setup ScrimX ssverification?**\n"
             "> Click the `Setup ssverify` button to set up ssverify.\n\n"
             "**What is Custom Filter?**\n"
             "> Custom Filter allows you to set ssverification for any app or for any type of ss.\n\n"

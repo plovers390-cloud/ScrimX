@@ -14,11 +14,11 @@ class Guild(BaseDbModel):
 
     guild_id = fields.BigIntField(pk=True, index=True)
 
-    prefix = fields.CharField(default="q", max_length=5)
+    prefix = fields.CharField(default="x", max_length=5)
     embed_color = fields.IntField(default=65459, null=True)
     embed_footer = fields.TextField(default=config.FOOTER)
 
-    tag_enabled_for_everyone = fields.BooleanField(default=True)  # ye naam maine ni rkha sachi
+    tag_enabled_for_everyone = fields.BooleanField(default=True)
 
     is_premium = fields.BooleanField(default=False)
     made_premium_by = fields.BigIntField(null=True)
@@ -28,6 +28,7 @@ class Guild(BaseDbModel):
     public_profile = fields.BooleanField(default=True)  # whether to list the server on global leaderboards
 
     private_channel = fields.BigIntField(null=True)
+    
 
     dashboard_access = fields.JSONField(default=_dict)
 

@@ -80,7 +80,7 @@ async def aenumerate(asequence, start=0):
 
 
 def get_ipm(bot):
-    """Returns Quotient's cmds invoke rate per minute"""
+    """Returns ScrimX's cmds invoke rate per minute"""
     time = (datetime.now(tz=IST) - bot.start_time).total_seconds()
     per_second = bot.cmd_invokes / time
     per_minute = per_second * 60

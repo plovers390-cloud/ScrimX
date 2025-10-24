@@ -91,7 +91,7 @@ class ScreenshotType(discord.ui.Button):
 
             if not self.view.record.ss_type == SSType.yt:
                 if not await self.ctx.is_premium_guild():
-                    return await self.ctx.error("You need Quotient Prime to set this filter. (Use `qperks`)", 4)
+                    return await self.ctx.error("You need ScrimX Prime to set this filter. (Use `xperks`)", 4)
 
             if _v.custom_id == "custom":
                 _m = await self.ctx.simple(
@@ -241,7 +241,7 @@ class SaveButton(discord.ui.Button):
 
         if not await self.ctx.is_premium_guild():
             if await SSVerify.filter(guild_id=self.ctx.guild.id).exists():
-                return await self.ctx.premium_mango("You need Quotient Premium to setup more than 1 ssverify.")
+                return await self.ctx.premium_mango("You need ScrimX Premium to setup more than 1 ssverify.")
 
         await self.view.record.save()
         self.ctx.bot.cache.ssverify_channels.add(self.view.record.channel_id)

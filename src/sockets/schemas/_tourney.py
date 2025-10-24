@@ -8,7 +8,7 @@ from pydantic import BaseModel
 class SockTourney(BaseModel):
     id: Optional[int] = None
     guild_id: int
-    name: str = "Quotient-Tourney"
+    name: str = "ScrimX-Tourney"
     registration_channel_id: int
     confirm_channel_id: int
     role_id: int

@@ -42,12 +42,12 @@ class TourneyManager(EsportsBaseView):
         ]
 
         _e = discord.Embed(
-            color=self.bot.color, title="Quotient Smart Tournament Manager", url=self.bot.config.SERVER_LINK
+            color=self.bot.color, title="ScrimX Smart Tournament Manager", url=self.bot.config.SERVER_LINK
         )
         _e.description = "\n".join(to_show) if to_show else "```Click Create button for new tourney.```"
         _e.set_thumbnail(url=self.ctx.guild.me.display_avatar.url)
         _e.set_footer(
-            text="Quotient Prime allows unlimited tournaments.",
+            text="ScrimX Prime allows unlimited tournaments.",
             icon_url=getattr(self.ctx.author.display_avatar, "url", None),
         )
 
@@ -63,8 +63,8 @@ class TourneyManager(EsportsBaseView):
         if not await self.ctx.is_premium_guild():
             if await Tourney.filter(guild_id=self.ctx.guild.id).count() >= 1:
                 return await self.ctx.error(
-                    f"You need [Quotient Premium](https://quotientbot.xyz/premium) to create more than one tournament.\n"
-                    "\nBuy Prime for just ₹29 here: https://quotientbot.xyz/premium",
+                    f"You need [ScrimX Premium](https://discord.gg/rS58vTYeHc) to create more than one tournament.\n"
+                    "\nBuy Prime for just ₹29 here: https://discord.gg/rS58vTYeHc",
                     7,
                 )
 
@@ -293,9 +293,9 @@ class TourneyManager(EsportsBaseView):
         await interaction.response.defer()
         # if not await self.ctx.is_premium_guild():
         #     return await self.ctx.error(
-        #         "You need Quotient Premium to download Ms Excel file containing all the "
+        #         "You need ScrimX Premium to download Ms Excel file containing all the "
         #         f"registration data of your tourneys.\n\n"
-        #         "Buy Premium for just ₹29 here: https://quotientbot.xyz/premium",
+        #         "Buy Premium for just ₹29 here: https://discord.gg/QyhbVffzke",
         #         6,
         #     )
 
